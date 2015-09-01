@@ -1,2 +1,2 @@
 # philkrie.github.io
-A personal website
+A personal website created by Phillip Kriegel for Phillip Kriegel.
