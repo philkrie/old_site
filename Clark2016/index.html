@@ -16,45 +16,46 @@
 
 </head>
 <body>
-
-<div id ="header">
-  <h2>Loading...</h2>
-</div>
-<div id ="selector">
-  <select onchange="viewEntry(this.value)">
-    <option value=""></option>
-    <option value="8:00 AM">8:00 AM</option>
-    <option value="8:30 AM">8:30 AM</option>
-    <option value="9:00 AM">9:00 AM</option>
-    <option value="9:30 AM">9:30 AM</option>
-    <option value="10:00 AM">10:00 AM</option>
-    <option value="10:30 AM">10:30 AM</option>
-    <option value="11:00 AM">11:00 AM</option>
-    <option value="11:30 AM">11:30 AM</option>
-    <option value="12:00 PM">12:00 PM</option>
-    <option value="12:30 PM">12:30 PM</option>
-    <option value="1:00 PM">1:00 PM</option>
-    <option value="1:30 PM">1:30 PM</option>
-    <option value="2:00 PM">2:00 PM</option>
-    <option value="2:30 PM">2:30 PM</option>
-    <option value="3:00 PM">3:00 PM</option>
-    <option value="3:30 PM">3:30 PM</option>
-    <option value="4:00 PM">4:00 PM</option>
-    <option value="4:30 PM">4:30 PM</option>
-    <option value="5:00 PM">5:00 PM</option>
-    <option value="5:30 PM">5:30 PM</option>
-    <option value="6:00 PM">6:00 PM</option>
-    <option value="6:30 PM">6:30 PM</option>
-    <option value="7:00 PM">7:00 PM</option>
-    <option value="7:30 PM">7:30 PM</option>
-    <option value="8:00 PM">8:00 PM</option>
-    <option value="8:30 PM">8:30 PM</option>
-    <option value="9:00 PM">9:00 PM</option>
-    <option value="9:30 PM">9:30 PM</option>
-</select>
-<button onclick="exportCsv()">Export results to CSV</button>
-</div>
-<div id="results"></div>
+  <div id="container">
+    <div id ="header">
+      <h2>Loading...</h2>
+    </div>
+    <div id ="selector">
+      <select onchange="viewEntry(this.value)">
+        <option value=""></option>
+        <option value="8:00 AM">8:00 AM</option>
+        <option value="8:30 AM">8:30 AM</option>
+        <option value="9:00 AM">9:00 AM</option>
+        <option value="9:30 AM">9:30 AM</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="10:30 AM">10:30 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <option value="11:30 AM">11:30 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="12:30 PM">12:30 PM</option>
+        <option value="1:00 PM">1:00 PM</option>
+        <option value="1:30 PM">1:30 PM</option>
+        <option value="2:00 PM">2:00 PM</option>
+        <option value="2:30 PM">2:30 PM</option>
+        <option value="3:00 PM">3:00 PM</option>
+        <option value="3:30 PM">3:30 PM</option>
+        <option value="4:00 PM">4:00 PM</option>
+        <option value="4:30 PM">4:30 PM</option>
+        <option value="5:00 PM">5:00 PM</option>
+        <option value="5:30 PM">5:30 PM</option>
+        <option value="6:00 PM">6:00 PM</option>
+        <option value="6:30 PM">6:30 PM</option>
+        <option value="7:00 PM">7:00 PM</option>
+        <option value="7:30 PM">7:30 PM</option>
+        <option value="8:00 PM">8:00 PM</option>
+        <option value="8:30 PM">8:30 PM</option>
+        <option value="9:00 PM">9:00 PM</option>
+        <option value="9:30 PM">9:30 PM</option>
+    </select>
+    <button onclick="exportCsv()">Export results to CSV</button>
+    </div>
+    <div id="results"></div>
+  </div>
 </body>
 
 <script type="text/javascript">
@@ -84,21 +85,29 @@
       for(var i = 1; i < g_data[building]["elements"].length; i++){
           if(g_data[building]["elements"][i][value] == "Y"){
             room_number = g_data[building]["elements"][i]["Room Number"]
-            $("#results").append("<div>" + building + " " + room_number + "</div>")
             arr.push(building + " " + room_number)
             console.log(building + " " + g_data[building]["elements"][i]["Room Number"])
           }
       }
     }
+    arr.sort()
+    arr.forEach(function(room, index){
+        $("#results").append("<div>" + room + "</div>")
+    }); 
   }
 
   function exportCsv(){
     var csvContent = "data:text/csv;charset=utf-8,";
-    arr.forEach(function(room, index){
-      csvContent += index < arr.length-1 ? room+ ", " : room;
-    }); 
-    var encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+    if(arr.length == 0){
+      alert("You have not queried any data")
+    } else {
+      arr.sort()
+      arr.forEach(function(room, index){
+        csvContent += index < arr.length-1 ? room+ ", " : room;
+      }); 
+      var encodedUri = encodeURI(csvContent);
+      window.open(encodedUri);
+    }
   }
 
 </script>
