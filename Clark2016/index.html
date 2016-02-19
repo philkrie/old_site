@@ -20,8 +20,18 @@
     <div id ="header">
       <h2>Loading...</h2>
     </div>
-    <div id ="selector">
-      <select onchange="viewEntry(this.value)">
+
+    <div id ="day-selector">
+      
+    </div>
+
+    <div id ="time-selector">
+      <select id="date" onchange="viewEntry()">
+          <option value=""></option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+      </select>
+      <select id="time" onchange="viewEntry()">
         <option value=""></option>
         <option value="8:00 AM">8:00 AM</option>
         <option value="8:30 AM">8:30 AM</option>
@@ -61,49 +71,80 @@
 <script type="text/javascript">
   window.onload = function() { init() };
 
-  var public_spreadsheet_url = "https://docs.google.com/spreadsheets/d/1ZQzZCGYoQEYuXOO5AJZ5t5d1-SMayVAN51iThOgEr10/pubhtml"
-  var g_tabletop
-  var g_data
+  var public_spreadsheet_url_friday = "https://docs.google.com/spreadsheets/d/1ZQzZCGYoQEYuXOO5AJZ5t5d1-SMayVAN51iThOgEr10/pubhtml"
+  var public_spreadsheet_url_saturday = "https://docs.google.com/spreadsheets/d/17031RvvdkkWD98QgCB2Q6UEpbZEvq7jbzQrp0tVmJfw/pubhtml"
+  var friday_tabletop
+  var friday_data
+  var saturday_tabletop
+  var saturday_data
   var room_number
-  var arr = [];
+  var reservation
+  var room_arr = []
+  var res_arr = []
   function init() {
-    Tabletop.init( { key: public_spreadsheet_url,
-                     callback: callback } )
+    Tabletop.init( { key: public_spreadsheet_url_friday,
+                     callback: callback1 } )
+
+    Tabletop.init( { key: public_spreadsheet_url_saturday,
+                     callback: callback2 })
   }
 
-  function callback(data, tabletop) {
+  function callback1(data, tabletop) {
+    friday_tabletop = tabletop
+    friday_data = data
+  }
+
+  function callback2(data, tabletop) {
+    saturday_tabletop = tabletop
+    saturday_data = data
     $('#header > h2').html("Select a time")
-    g_tabletop = tabletop
-    g_data = data
-    
   }
 
-  function viewEntry(value) {
+  function viewEntry() {
     $("#results").empty()
-    arr = []
-    for(var building in g_data){
-      for(var i = 1; i < g_data[building]["elements"].length; i++){
-          if(g_data[building]["elements"][i][value] == "Y"){
-            room_number = g_data[building]["elements"][i]["Room Number"]
-            arr.push(building + " " + room_number)
-            console.log(building + " " + g_data[building]["elements"][i]["Room Number"])
-          }
+    room_arr = []
+    var date = $("#date option:selected").text();
+    var time = $("#time option:selected").text();
+    console.log(date + time)
+    if(date == "Friday"){
+      for(var building in friday_data){
+        for(var i = 0; i < friday_data[building]["elements"].length; i++){
+            if(friday_data[building]["elements"][i][time] == "Y"){
+              room_number = friday_data[building]["elements"][i]["Room Number"]
+              reservation = friday_data[building]["elements"][i]["Reservation"]
+              room_arr.push(building + " " + room_number + "|" + reservation)
+              console.log(building + " " + friday_data[building]["elements"][i]["Room Number"])
+            }
+        }
+      }
+    } else if(date == "Saturday") {
+      for(var building in saturday_data){
+        for(var i = 0; i < saturday_data[building]["elements"].length; i++){
+            if(saturday_data[building]["elements"][i][time] == "Y"){
+              room_number = saturday_data[building]["elements"][i]["Room Number"]
+              reservation = saturday_data[building]["elements"][i]["Reservation"]
+              room_arr.push(building + " " + room_number + "|" + reservation)
+              console.log(building + " " + saturday_data[building]["elements"][i]["Room Number"])
+            }
+        }
       }
     }
-    arr.sort()
-    arr.forEach(function(room, index){
-        $("#results").append("<div>" + room + "</div>")
+    room_arr.sort()
+    room_arr.forEach(function(room, index){
+      var res = room.split("|")
+      $("#results").append("<div class='cell'><div class='room'>" + res[0] + "</div><div class='res'>" + res[1] + "</div></div>")
     }); 
   }
 
   function exportCsv(){
     var csvContent = "data:text/csv;charset=utf-8,";
-    if(arr.length == 0){
+    if(room_arr.length == 0){
       alert("You have not queried any data")
     } else {
-      arr.sort()
-      arr.forEach(function(room, index){
-        csvContent += index < arr.length-1 ? room+ ", " : room;
+      room_arr.sort()
+      room_arr.forEach(function(room, index){
+        var res = room.split("|")
+        csvContent += index < room_arr.length-1 ? res[0]+ ", " : res[0];
       }); 
       var encodedUri = encodeURI(csvContent);
       window.open(encodedUri);

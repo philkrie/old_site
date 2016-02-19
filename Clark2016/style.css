@@ -3,7 +3,7 @@
 }
 
 #container {
-	width: 300px;
+	width: 500px;
 	margin: 0 auto;
 }
 
@@ -12,7 +12,7 @@
 	text-align: center;
 }
 
-#selector {
+#time-selector {
 	margin: 0 auto;
 	text-align: center;
 }
@@ -22,5 +22,20 @@
 	margin: 0 auto;
 	text-align: left;
 	line-height: 2em;
-	width: 200px;
+	width: 500px;
+}
+
+.room {
+	float: left;
+}
+
+.res {
+	float: right;
+}
+
+.cell {
+	width: 100%;
+	height: auto;
+	clear: both;
+	border-bottom: dotted;
 }
