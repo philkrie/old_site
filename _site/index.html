@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>Room Manager</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Required JS for all pages -->
+  <script src='tabletop.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <link href="style.css" rel="stylesheet"/>
+  <!-- build:js -->
+    <script src='app.js'></script>
+  <!-- endbuild -->
+
+</head>
+<body>
+  <div id="container">
+    <div id ="header">
+      <h2>Loading...</h2>
+    </div>
+
+    <div id ="day-selector">
+      
+    </div>
+
+    <div id ="time-selector">
+      <select id="date" onchange="viewEntry()">
+          <option value=""></option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+      </select>
+      <select id="time" onchange="viewEntry()">
+        <option value=""></option>
+        <option value="8:00 AM">8:00 AM</option>
+        <option value="8:30 AM">8:30 AM</option>
+        <option value="9:00 AM">9:00 AM</option>
+        <option value="9:30 AM">9:30 AM</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="10:30 AM">10:30 AM</option>
+        <option value="11:00 AM">11:00 AM</option>
+        <option value="11:30 AM">11:30 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="12:30 PM">12:30 PM</option>
+        <option value="1:00 PM">1:00 PM</option>
+        <option value="1:30 PM">1:30 PM</option>
+        <option value="2:00 PM">2:00 PM</option>
+        <option value="2:30 PM">2:30 PM</option>
+        <option value="3:00 PM">3:00 PM</option>
+        <option value="3:30 PM">3:30 PM</option>
+        <option value="4:00 PM">4:00 PM</option>
+        <option value="4:30 PM">4:30 PM</option>
+        <option value="5:00 PM">5:00 PM</option>
+        <option value="5:30 PM">5:30 PM</option>
+        <option value="6:00 PM">6:00 PM</option>
+        <option value="6:30 PM">6:30 PM</option>
+        <option value="7:00 PM">7:00 PM</option>
+        <option value="7:30 PM">7:30 PM</option>
+        <option value="8:00 PM">8:00 PM</option>
+        <option value="8:30 PM">8:30 PM</option>
+        <option value="9:00 PM">9:00 PM</option>
+        <option value="9:30 PM">9:30 PM</option>
+    </select>
+    <button onclick="exportCsv()">Export results to CSV</button>
+    </div>
+    <div id="results"></div>
+  </div>
+</body>
+
+<script type="text/javascript">
+  window.onload = function() { init() };
+
+  var public_spreadsheet_url_friday = "https://docs.google.com/spreadsheets/d/1ZQzZCGYoQEYuXOO5AJZ5t5d1-SMayVAN51iThOgEr10/pubhtml"
+  var public_spreadsheet_url_saturday = "https://docs.google.com/spreadsheets/d/17031RvvdkkWD98QgCB2Q6UEpbZEvq7jbzQrp0tVmJfw/pubhtml"
+  var friday_tabletop
+  var friday_data
+  var saturday_tabletop
+  var saturday_data
+  var room_number
+  var reservation
+  var room_arr = []
+  var res_arr = []
+  function init() {
+    Tabletop.init( { key: public_spreadsheet_url_friday,
+                     callback: callback1 } )
+
+    Tabletop.init( { key: public_spreadsheet_url_saturday,
+                     callback: callback2 })
+  }
+
+  function callback1(data, tabletop) {
+    friday_tabletop = tabletop
+    friday_data = data
+  }
+
+  function callback2(data, tabletop) {
+    saturday_tabletop = tabletop
+    saturday_data = data
+    $('#header > h2').html("Select a time")
+  }
+
+  function viewEntry() {
+    $("#results").empty()
+    room_arr = []
+    var date = $("#date option:selected").text();
+    var time = $("#time option:selected").text();
+    console.log(date + time)
+    if(date == "Friday"){
+      for(var building in friday_data){
+        for(var i = 0; i < friday_data[building]["elements"].length; i++){
+            if(friday_data[building]["elements"][i][time] == "Y"){
+              room_number = friday_data[building]["elements"][i]["Room Number"]
+              reservation = friday_data[building]["elements"][i]["Reservation"]
+              room_arr.push(building + " " + room_number + "|" + reservation)
+              console.log(building + " " + friday_data[building]["elements"][i]["Room Number"])
+            }
+        }
+      }
+    } else if(date == "Saturday") {
+      for(var building in saturday_data){
+        for(var i = 0; i < saturday_data[building]["elements"].length; i++){
+            if(saturday_data[building]["elements"][i][time] == "Y"){
+              room_number = saturday_data[building]["elements"][i]["Room Number"]
+              reservation = saturday_data[building]["elements"][i]["Reservation"]
+              room_arr.push(building + " " + room_number + "|" + reservation)
+              console.log(building + " " + saturday_data[building]["elements"][i]["Room Number"])
+            }
+        }
+      }
+    }
+    room_arr.sort()
+    room_arr.forEach(function(room, index){
+      var res = room.split("|")
+      $("#results").append("<div class='cell'><div class='room'>" + res[0] + "</div><div class='res'>" + res[1] + "</div></div>")
+    }); 
+  }
+
+  function exportCsv(){
+    var csvContent = "data:text/csv;charset=utf-8,";
+    if(room_arr.length == 0){
+      alert("You have not queried any data")
+    } else {
+      room_arr.sort()
+      room_arr.forEach(function(room, index){
+        var res = room.split("|")
+        csvContent += index < room_arr.length-1 ? res[0]+ ", " : res[0];
+      }); 
+      var encodedUri = encodeURI(csvContent);
+      window.open(encodedUri);
+    }
+  }
+
+</script>
+</html>
