@@ -5,14 +5,6 @@
             <!-- link to main stylesheet -->
             <link rel="stylesheet" type="text/css" href="/css/main.css">
             <script src="js/typed.js"></script>
-            <script>
-                $(function(){
-                    $(".blurb").typed({
-                        strings: ["First sentence.", "Second sentence."],
-                        typeSpeed: 0
-                    });
-                });
-            </script>
         </head>
         <body>
             <nav>
@@ -35,4 +27,12 @@
                 </ul>
             </footer>
         </body>
+        <script>
+            $(function(){
+                $(".container").typed({
+                    strings: ["First sentence.", "Second sentence."],
+                    typeSpeed: 0
+                });
+            });
+        </script>
     </html>
