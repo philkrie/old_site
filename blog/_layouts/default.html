@@ -3,16 +3,14 @@
         <head>
             <title>{{ page.title }}</title>
             <!-- link to main stylesheet -->
-            <link rel="stylesheet" type="text/css" href="/css/style.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-            <script src="js/typed.js"></script>
+            <link rel="stylesheet" type="text/css" href="css/blog_style.css">
         </head>
         <body>
             <nav>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/cv">CV</a></li>
+                    <li><a href="{{base}}/index.html" target="_self">Home</a></li>
+                    <li><a href="{{base}}about">About</a></li>
+                    <li><a href="{{base}}cv">CV</a></li>
                     <li><a href="/blog">Blog</a></li>
                 </ul>
             </nav>
@@ -31,8 +29,8 @@
         <script>
             $(function(){
                 $(".typer").typed({
-                    strings: ["Hello, my name is Phillip Kriegel", "Web Developer", "Programmer", "Duck", "Math Enthusiast", "Tech Nerd", "Phillip Kriegel"],
-                    typeSpeed: 0
+                    strings: ["hello, my name is phillip kriegel", "web developer", "programmer", "duck", "math enthusiast", "tech nerd", "phillip kriegel"],
+                    typeSpeed: 100
                 });
             });
         </script>

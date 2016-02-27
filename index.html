@@ -1,7 +1,37 @@
----
-layout: default
-title: Phillip Kriegel
----
-<div class="blurb">
-	<h1><div class="typer"></div></h1>
-</div><!-- /.blurb -->
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>Phillip Kriegel</title>
+            <!-- link to main stylesheet -->
+            <link rel="stylesheet" type="text/css" href="css/style.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+            <script src="js/typed.js"></script>
+        </head>
+        <body>
+            <nav>
+                <ul>
+                    <li><a href="" target="_self">Home</a></li>
+                    <li><a href="about">About</a></li>
+                    <li><a href="cv">CV</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </nav>
+            <div class="container">
+            	<h1><div class="typer"></div></h1>
+            </div><!-- /.container -->
+            <footer>
+                <ul>
+                    <li><a href="mailto:philkrie@gmail.com">email</a></li>
+                    <li><a href="https://github.com/philkrie">github.com/philkrie</a></li>
+                </ul>
+            </footer>
+        </body>
+        <script>
+            $(function(){
+                $(".typer").typed({
+                    strings: ["hello, my name is phillip kriegel", "web developer", "programmer", "duck", "math enthusiast", "tech nerd", "phillip kriegel"],
+                    typeSpeed: 100
+                });
+            });
+        </script>
+    </html>

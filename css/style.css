@@ -27,9 +27,11 @@ a:hover {
 
 .typed-cursor{
     opacity: 1;
-    -webkit-animation: blink 0.7s infinite;
-    -moz-animation: blink 0.7s infinite;
-    animation: blink 0.7s infinite;
+    -webkit-animation: blink 1.4s infinite;
+    -moz-animation: blink 1.4s infinite;
+    animation: blink 1.4s infinite;
+    position: relative;
+    top: -5px;
 }
 @keyframes blink{
     0% { opacity:1; }
@@ -49,10 +51,10 @@ a:hover {
 
 h1 {
     font-size: 3em;
-    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    font-family:'Inconsolata', 'Arial', 'Sans-Serif';
     color: #00FB30;
 }
-p {
+p, span {
     font-size: 1.5em;
     line-height: 1.4em;
     color: #333;
@@ -69,4 +71,25 @@ ul.posts {
 
 ul.posts li {
     list-style: none;
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Inconsolata'), url(https://fonts.gstatic.com/s/inconsolata/v12/BjAYBlHtW3CJxDcjzrnZCLrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+}
+@font-face {
+  font-family: 'Inconsolata';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Inconsolata Bold'), local('Inconsolata-Bold'), url(https://fonts.gstatic.com/s/inconsolata/v12/AIed271kqQlcIRSOnQH0yRbnBKKEOwRKgsHDreGcocg.woff) format('woff');
+}
+
+*{
+    /*font-family: courier;*/
+    font-family: 'helvetica';
+    font-family: 'Inconsolata' ;
+    font-weight: 100;
+    /*letter-spacing: .025rem;*/
 }
